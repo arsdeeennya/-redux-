@@ -1,30 +1,32 @@
-import React, {Component} from "react";
+import React, {Component} from "react"
+import {connect} from "react-redux"
+// state,actionとcomponentとの関連付けを行ってviewのイベントで状態を遷移されて、
+// 遷移後の状態を画面に再描画する
+// reducerがコンストラクタの役割を担う
+import {increment, decrement} from "../actions"
 
-const App = () => (<Counter></Counter>)
-
-class Counter extends Component {
-	constructor(props){
-		super(props)
-		this.state = { count: 0 }
-	}
-	
-	handlePlusButton = () => {
-		this.setState({ count: this.state.count + 1})
-	}
-	
-	handleMinusButton = () => {
-		this.setState({ count: this.state.count - 1})
-	}
-	
+class App extends Component {
 	render() {
+		const props = this.props
+		
 		return (
 			<React.Fragment>
-				count: {this.state.count}
-				<a onClick={this.handlePlusButton}>+1</a>
-				<a onClick={this.handleMinusButton}>-1</a>
+				<div>value: {props.value}</div>
+				<a onClick={props.increment}>+1</a>
+				<a onClick={props.decrement}>-1</a>
 			</React.Fragment>
 		)
 	}
 }
 
-export default App;
+const mapStateToProps = state => ({ value: state.count.value })
+
+// const mapStateToProps = dispatch => ({
+// 	increment: () => dispatch(increment()),
+// 	decrement: () => dispatch(decrement())
+// })
+
+// あるアクションが発生した時にreducerにtypeに応じた状態遷移を実行させるための関数がdispatch（以下は省略で書いたもの）
+const mapDispatchToProps = ({ increment, decrement })
+
+export default connect(mapStateToProps, mapDispatchToProps)(App)
